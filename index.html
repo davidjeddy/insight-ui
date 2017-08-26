@@ -1,0 +1,491 @@
+<!doctype html>
+<html>
+<head>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+
+    <!-- circle master -->
+    <script src="backend/js/circles-master/circles.js"></script>
+
+
+    <!-- moment js -->
+    <script type="text/javascript" src="/backend/js/moment/moment.js"></script>
+
+    <!-- datetime picker -->
+    <script type="text/javascript" src="/backend/js/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
+    <!-- data tables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.css">
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+    <!-- jq plot -->
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+
+
+
+    <script>
+        function getCircleColors(percent) {
+            var colors;
+
+            if (percent > 75) {
+                // green
+                colors = ['#a9ef97', '#51ef26'];
+            } else if (percent > 55) {
+                // orange
+                colors = ['#efc586', '#ed981a'];
+            } else {
+                // red
+                colors = ['#eda1a1', '#ed1e1e'];
+            }
+
+            return colors;
+        }
+
+
+        $(function () {
+            var myCircle = Circles.create({
+                id: 'circles-1',
+                radius: 60,
+                value: 43,
+                maxValue: 100,
+                width: 10,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#a9ef97', '#51ef26'],
+                duration: 400,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+
+            var myCircle2 = Circles.create({
+                id: 'circles-2',
+                radius: 60,
+                value: 77,
+                maxValue: 100,
+                width: 10,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#D3B6C6', '#4B253A'],
+                duration: 400,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+
+
+            $('#report-start-date').datetimepicker({format: 'MM/DD/YYYY', daysOfWeekDisabled: [1, 2, 3, 4, 5, 6]});
+            $('#report-end-date').datetimepicker({format: 'MM/DD/YYYY', daysOfWeekDisabled: [1, 2, 3, 4, 5, 6]});
+            $('#customer-start-date').datetimepicker({format: 'MM/DD/YYYY', daysOfWeekDisabled: [1, 2, 3, 4, 5, 6]});
+
+
+            $(document).on('dp.show', function(e) {
+                console.log('show');
+                var x = $('[data-action="selectDay"]').css({ 'color': 'red', 'font-size': '150%' });
+                console.log(x);
+            });
+
+            var dataSet = [
+                [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
+                [ "Garrett Winters", "Accountant", "Tokyo", "8422", "2011/07/25", "$170,750" ],
+                [ "Ashton Cox", "Junior Technical Author", "San Francisco", "1562", "2009/01/12", "$86,000" ],
+                [ "Cedric Kelly", "Senior Javascript Developer", "Edinburgh", "6224", "2012/03/29", "$433,060" ],
+            ];
+
+            $('#example').DataTable( {
+                data: dataSet,
+                searching: false,
+                lengthChange: false,
+                columns: [
+                    { title: "Name" },
+                    { title: "Position" },
+                    { title: "Office" },
+                    { title: "Extn." },
+                    { title: "Start date" },
+                    { title: "Salary" }
+                ]
+            } );
+
+
+
+
+            // restaurant view stuff
+            // todo: this will be an api request to get this data. It will then go into datatable
+            var restaurantdataSet = [
+                {
+                    "id": 1,
+                    "store": "Winter Park",
+                    "orders": "33",
+                    "renewalRate": "61%",
+                    "cumulativeRenewalRate": "35%",
+                    "aov": "$306.38",
+                    "revenue": "$5711.99",
+                    "NGF": "20.89"
+                },
+                {
+                    "id": 2,
+                    "store": "Winter Park",
+                    "orders": "33",
+                    "renewalRate": "61%",
+                    "cumulativeRenewalRate": "35%",
+                    "aov": "$306.38",
+                    "revenue": "$5711.99",
+                    "NGF": "20.89"
+                },
+                {
+                    "id": 3,
+                    "store": "Winter Park",
+                    "orders": "33",
+                    "renewalRate": "61%",
+                    "cumulativeRenewalRate": "35%",
+                    "aov": "$306.38",
+                    "revenue": "$5711.99",
+                    "NGF": "20.89"
+                }
+            ];
+
+            // todo: this will be the ajax call to get the restaurant data for the datatable on page load
+            $.ajax({
+                url: '',
+                type: '',
+                success: function() {
+                    console.log('success callback')
+                },
+                error: function() {
+                    console.log('error callback');
+                }
+            });
+
+
+
+
+
+
+            $('#restaurant-table').DataTable( {
+                data: restaurantdataSet,
+                searching: false,
+                lengthChange: false,
+                rowId: "id",
+                //columns: [
+                //    { title: "Store" },
+                //    { title: "Orders" },
+                //    { title: "Renewal Rate" },
+                //    { title: "Cum Renewal Rate" },
+                //    { title: "AOV" },
+                //    { title: "Net Revenues" },
+                //    { title: "GM /NTF  Customer" }
+                //]
+                "columns": [
+                    { "data": "store", "title": "Store" },
+                    { "data": "orders", "title": "Orders" },
+                    { "data": "renewalRate", "title": "Renewal Rate" },
+                    { "data": "cumulativeRenewalRate", "title": "Cumulative Renewal Rate" },
+                    { "data": "aov", "title": "AOV" },
+                    { "data": "revenue", "title": "Revenue" },
+                    { "data": "NGF", "title": "NGF" }
+                ]
+            } );
+
+
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                title:{
+                    text: "My First Chart in CanvasJS"
+                },
+                data: [
+                    //{
+                    //    // Change type to "doughnut", "line", "splineArea", etc.
+                    //    type: "line",
+                    //    dataPoints: [
+                    //        { label: "7/16/2017",  y: 33.33  },
+                    //        { label: "7/23/2017", y: 44.44  },
+                    //        { label: "7/30/2017", y: 33.55  },
+                    //        { label: "8/6/2017",  y: 66.66  },
+                    //    ]
+                    //},
+                    //{
+                    //    // Change type to "doughnut", "line", "splineArea", etc.
+                    //    type: "line",
+                    //    dataPoints: [
+                    //        { label: "7/16/2017",  y: 10  },
+                    //        { label: "7/23/2017", y: 15  },
+                    //        { label: "7/30/2017", y: 25  },
+                    //        { label: "8/6/2017",  y: 30  }
+                    //    ]
+                    //}
+
+                ]
+            });
+
+
+
+            chart.render();
+
+            var storesInChart = [];
+
+            $(document).on('click', '#restaurant-table tr', function () {
+                var storeId = $(this).attr('id');
+
+                // check if the storeId already exists in our chart
+                var storeChartIndex = getStoreChartIndex(storeId);
+                if (storeChartIndex !== false) {
+                    // the store is alredy displayed in the chart, remove it via its index
+                    chart.options.data.splice(storeChartIndex, 1);
+                    storesInChart.splice(storeChartIndex, 1);
+
+                }  else {
+                    // get data about this store from the backend
+                    var storeData = getStoreData(storeId);
+
+                    // push it into the chart
+                    chart.options.data.push({
+                        type: "line",
+                        dataPoints: storeData
+                    });
+
+                    // store the store id and position in chart, used later for removing
+                    storesInChart.push({storeId: storeId, chartIndex: chart.options.data.length});
+                }
+
+
+                chart.render();
+            });
+
+            function getStoreChartIndex(storeId) {
+                var storeIndex = false
+                storesInChart.forEach(function(element, index) {
+                    if (element.storeId == storeId) {
+                        storeIndex = index;
+                    }
+                });
+
+                return storeIndex;
+            }
+
+            // todo: this will be the call to get one month of restaurant revenue
+            function getStoreData(storeId) {
+                return [
+                    {label: "7/16/2017", y: 11.33},
+                    {label: "7/23/2017", y: 22.44},
+                    {label: "7/30/2017", y: 11.55},
+                    {label: "8/6/2017", y: Math.floor(Math.random() * 10) + 1 }
+                ];
+
+                $.ajax({
+                    url: '',
+                    type: '',
+                    success: function() {
+                        console.log('success callback')
+                    },
+                    error: function() {
+                        console.log('error callback');
+                    }
+                });
+            }
+
+
+        });
+    </script>
+    <style>
+        .top-column {
+            font-size:50px;
+        }
+
+        #report-container {
+            margin-top:15px;
+        }
+
+        #renewal-rate-container {
+            margin-top:15px;
+        }
+
+        #column2-row2 {
+            margin-top:75px;
+            font-size:20px;
+        }
+
+        .circle-label {
+            margin-top:15px;
+        }
+    </style>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+</head>
+<body>
+
+
+<div class="container-fluid">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Report Start Date</label>
+                        <div class='input-group date' id='report-start-date'>
+                            <input type='text' class="form-control"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label>Report End Date</label>
+                    <div class="form-group">
+                        <div class='input-group date' id='report-end-date'>
+                            <input type='text' class="form-control"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label>Store</label>
+
+                    <select class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label>Customer Start Date</label>
+                    <div class="form-group">
+                        <div class='input-group date' id='customer-start-date'>
+                            <input type='text' class="form-control"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-default btn-primary pull-right" type="submit">Generate Report</button>
+                </div>
+            </div>
+            <div id="report-container" class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <div class="top-column">
+                                <label>Orders:</label> 43
+                            </div>
+                        </div>
+                    </div>
+                    <div id="renewal-rate-container" class="row">
+                        <div class="col-md-6 text-center">
+                            <div class="circle" id="circles-1"></div>
+                            <label class="circle-label">Renewal Rate</label>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <div class="circle" id="circles-2"></div>
+                            <label class="circle-label">Cumulative Renewal Rate</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <div class="top-column">
+                                <label>Revenue:</label> $4700.93
+                            </div>
+                        </div>
+                    </div>
+                    <div id="column2-row2" class="row">
+                        <div class="col-md-6 text-center">
+                            <label>Average Order Value:</label> $1162.89
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <label>GM / NTF Customer:</label> $40.38
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">New Customers</a></li>
+                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Lost Customers</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        <table class="table" id="example"></table>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="profile">
+                        <table class="table">
+                            <thead>
+                            <tr><th>Name</th>
+                                <th>Phone Number</th>
+                                <th>Role</th>
+                                <th>Store</th>
+                                <th>Average Order Amount</th>
+                                <th>Lifetime Order Amount</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Restaurant view -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <!-- restaurant table -->
+            <table class="table" id="restaurant-table"></table>
+
+            <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+</body>
+</html>
