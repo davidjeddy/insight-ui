@@ -1,0 +1,302 @@
+<!doctype html>
+<!doctype html>
+<html>
+<head>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+    <!-- data tables -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.css">
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+    <!-- canvas js -->
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+
+    <script>
+        // todo: this will be an api request to get this data. It will then go into datatable
+//        var stores = [
+//            {
+//                "id": 1,
+//                "store": "Winter Park",
+//                "orders": "33",
+//                "renewalRate": "61%",
+//                "cumulativeRenewalRate": "35%",
+//                "aov": "$306.38",
+//                "revenue": "$5711.99",
+//                "NGF": "20.89"
+//            },
+//            {
+//                "id": 2,
+//                "store": "aaa",
+//                "orders": "33",
+//                "renewalRate": "61%",
+//                "cumulativeRenewalRate": "35%",
+//                "aov": "$306.38",
+//                "revenue": "$5711.99",
+//                "NGF": "20.89"
+//            },
+//            {
+//                "id": 3,
+//                "store": "bbb",
+//                "orders": "33",
+//                "renewalRate": "61%",
+//                "cumulativeRenewalRate": "35%",
+//                "aov": "$306.38",
+//                "revenue": "$5711.99",
+//                "NGF": "20.89"
+//            }
+//        ];
+        var stores;
+
+
+
+        function getAllStores() {
+            $.ajax({
+                url: 'http://34.230.19.251:8080/api/v1/store/index',
+                type: 'get',
+                success: function (data) {
+                    stores = data.items;
+                    updateStoresDataTable(stores);
+                    console.log('success callback')
+                },
+                error: function (error) {
+                    alert('error');
+                    console.log('error callback');
+                }
+            });
+        }
+
+        /**
+         * Init the data table with provided store data
+         */
+        function updateStoresDataTable(stores) {
+            $('#restaurant-table').DataTable({
+                data: stores,
+                searching: false,
+                lengthChange: false,
+                rowId: "id",
+                pageLength: 5,
+                "columns": [
+                    {"data": "name", "title": "Store"},
+                    {"data": "order_count", "title": "Orders"},
+                    {"data": "renewal_rate", "title": "Renewal Rate"},
+                    {
+                        "data": "renewal_count",
+                        "title": "Renewal Count"
+                    },
+                    {"data": "aov", "title": "AOV"},
+                    {"data": "revenue", "title": "Revenue"}
+                ]
+            });
+        }
+
+        $(function () {
+            stores = getAllStores();
+
+
+
+            var chart = new CanvasJS.Chart("revenueChart", {
+                data: [
+                    //{
+                    //    // Change type to "doughnut", "line", "splineArea", etc.
+                    //    type: "line",
+                    //    dataPoints: [
+                    //        { label: "7/16/2017",  y: 33.33  },
+                    //        { label: "7/23/2017", y: 44.44  },
+                    //        { label: "7/30/2017", y: 33.55  },
+                    //        { label: "8/6/2017",  y: 66.66  },
+                    //    ]
+                    //},
+                    //{
+                    //    // Change type to "doughnut", "line", "splineArea", etc.
+                    //    type: "line",
+                    //    dataPoints: [
+                    //        { label: "7/16/2017",  y: 10  },
+                    //        { label: "7/23/2017", y: 15  },
+                    //        { label: "7/30/2017", y: 25  },
+                    //        { label: "8/6/2017",  y: 30  }
+                    //    ]
+                    //}
+
+                ],
+                legend: {
+                    horizontalAlign: "left", // "center" , "right"
+                    verticalAlign: "center",  // "top" , "bottom"
+                    fontSize: 15
+                }
+            });
+
+
+            chart.render();
+
+            var storesInChart = [];
+
+
+
+            $(document).on('click', '#restaurant-table tr', function () {
+                var storeId = $(this).attr('id');
+                var store = getStore(storeId);
+
+                // check if the storeId already exists in our chart
+                var storeChartIndex = getStoreChartIndex(storeId);
+                if (storeChartIndex !== false) {
+                    // the store is alredy displayed in the chart, remove it via its index
+                    chart.options.data.splice(storeChartIndex, 1);
+                    storesInChart.splice(storeChartIndex, 1);
+
+                    // we may have removed the last item, hide the chart if so
+                    if (storesInChart.length === 0) {
+                        $('#charts-container').hide();
+                        $('#no-chart').show();
+                    }
+
+                } else {
+                    // get data about this store from the backend
+                    var storeData = getStoreData(storeId);
+
+                    // push it into the chart
+                    chart.options.data.push({
+                        type: "line",
+                        dataPoints: storeData,
+                        legendText: store.name,
+                        showInLegend: true
+                    });
+
+                    // store the store id and position in chart, used later for removing
+                    storesInChart.push({
+                        storeId: storeId,
+                        chartIndex: chart.options.data.length
+                    });
+
+                    $('#no-chart').hide();
+                    $('#charts-container').show();
+                }
+
+
+                chart.render();
+            });
+
+            /**
+             * gets store index in storesInChart, for removal
+             *
+             * @param storeId
+             * @returns {boolean}
+             */
+            function getStoreChartIndex(storeId) {
+                var storeIndex = false;
+                storesInChart.forEach(function (element, index) {
+                    if (element.storeId == storeId) {
+                        storeIndex = index;
+                    }
+                });
+
+                return storeIndex;
+            }
+
+            /**
+             * given a store id, find the object in the data provided by
+             * the backend representing this store
+             *
+             * @param storeId
+             */
+            function getStore(storeId) {
+                var store = false;
+                stores.forEach(function(element, index) {
+                    if (element.id == storeId){
+                        store = element;
+                    }
+                });
+
+                return store
+            }
+
+            // todo: this will be the call to get one month of restaurant revenue
+            function getStoreData(storeId) {
+                return [
+                    {label: "7/16/2017", y: 11.33},
+                    {label: "7/23/2017", y: 22.44},
+                    {label: "7/30/2017", y: 11.55},
+                    {label: "8/6/2017", y: Math.floor(Math.random() * 10) + 1}
+                ];
+
+                $.ajax({
+                    url: '',
+                    type: '',
+                    success: function () {
+                        console.log('success callback')
+                    },
+                    error: function () {
+                        console.log('error callback');
+                    }
+                });
+            }
+        });
+    </script>
+
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+          name="viewport">
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <meta http-equiv="Content-Language" content="en">
+</head>
+<body>
+
+
+
+
+
+
+<!-- store view -->
+<div class="panel panel-default" style="margin-top:20px;">
+    <div class="panel-body">
+        <!-- restaurant table -->
+        <table class="table table-condensed" id="restaurant-table"></table>
+    </div>
+</div>
+
+
+
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div id="no-chart">
+            <div class="alert alert-info text-center" role="alert">
+                Please choose a store to plot its history.
+            </div>
+        </div>
+
+        <div id="charts-container" style="display:none;">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Revenue</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <div id="revenueChart" style="height: 300px; width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+

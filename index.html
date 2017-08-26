@@ -130,42 +130,6 @@
 
 
 
-
-            // restaurant view stuff
-            // todo: this will be an api request to get this data. It will then go into datatable
-            var restaurantdataSet = [
-                {
-                    "id": 1,
-                    "store": "Winter Park",
-                    "orders": "33",
-                    "renewalRate": "61%",
-                    "cumulativeRenewalRate": "35%",
-                    "aov": "$306.38",
-                    "revenue": "$5711.99",
-                    "NGF": "20.89"
-                },
-                {
-                    "id": 2,
-                    "store": "Winter Park",
-                    "orders": "33",
-                    "renewalRate": "61%",
-                    "cumulativeRenewalRate": "35%",
-                    "aov": "$306.38",
-                    "revenue": "$5711.99",
-                    "NGF": "20.89"
-                },
-                {
-                    "id": 3,
-                    "store": "Winter Park",
-                    "orders": "33",
-                    "renewalRate": "61%",
-                    "cumulativeRenewalRate": "35%",
-                    "aov": "$306.38",
-                    "revenue": "$5711.99",
-                    "NGF": "20.89"
-                }
-            ];
-
             // todo: this will be the ajax call to get the restaurant data for the datatable on page load
             $.ajax({
                 url: '',
@@ -178,132 +142,6 @@
                 }
             });
 
-
-
-
-
-
-            $('#restaurant-table').DataTable( {
-                data: restaurantdataSet,
-                searching: false,
-                lengthChange: false,
-                rowId: "id",
-                //columns: [
-                //    { title: "Store" },
-                //    { title: "Orders" },
-                //    { title: "Renewal Rate" },
-                //    { title: "Cum Renewal Rate" },
-                //    { title: "AOV" },
-                //    { title: "Net Revenues" },
-                //    { title: "GM /NTF  Customer" }
-                //]
-                "columns": [
-                    { "data": "store", "title": "Store" },
-                    { "data": "orders", "title": "Orders" },
-                    { "data": "renewalRate", "title": "Renewal Rate" },
-                    { "data": "cumulativeRenewalRate", "title": "Cumulative Renewal Rate" },
-                    { "data": "aov", "title": "AOV" },
-                    { "data": "revenue", "title": "Revenue" },
-                    { "data": "NGF", "title": "NGF" }
-                ]
-            } );
-
-
-
-            var chart = new CanvasJS.Chart("chartContainer", {
-                title:{
-                    text: "My First Chart in CanvasJS"
-                },
-                data: [
-                    //{
-                    //    // Change type to "doughnut", "line", "splineArea", etc.
-                    //    type: "line",
-                    //    dataPoints: [
-                    //        { label: "7/16/2017",  y: 33.33  },
-                    //        { label: "7/23/2017", y: 44.44  },
-                    //        { label: "7/30/2017", y: 33.55  },
-                    //        { label: "8/6/2017",  y: 66.66  },
-                    //    ]
-                    //},
-                    //{
-                    //    // Change type to "doughnut", "line", "splineArea", etc.
-                    //    type: "line",
-                    //    dataPoints: [
-                    //        { label: "7/16/2017",  y: 10  },
-                    //        { label: "7/23/2017", y: 15  },
-                    //        { label: "7/30/2017", y: 25  },
-                    //        { label: "8/6/2017",  y: 30  }
-                    //    ]
-                    //}
-
-                ]
-            });
-
-
-
-            chart.render();
-
-            var storesInChart = [];
-
-            $(document).on('click', '#restaurant-table tr', function () {
-                var storeId = $(this).attr('id');
-
-                // check if the storeId already exists in our chart
-                var storeChartIndex = getStoreChartIndex(storeId);
-                if (storeChartIndex !== false) {
-                    // the store is alredy displayed in the chart, remove it via its index
-                    chart.options.data.splice(storeChartIndex, 1);
-                    storesInChart.splice(storeChartIndex, 1);
-
-                }  else {
-                    // get data about this store from the backend
-                    var storeData = getStoreData(storeId);
-
-                    // push it into the chart
-                    chart.options.data.push({
-                        type: "line",
-                        dataPoints: storeData
-                    });
-
-                    // store the store id and position in chart, used later for removing
-                    storesInChart.push({storeId: storeId, chartIndex: chart.options.data.length});
-                }
-
-
-                chart.render();
-            });
-
-            function getStoreChartIndex(storeId) {
-                var storeIndex = false
-                storesInChart.forEach(function(element, index) {
-                    if (element.storeId == storeId) {
-                        storeIndex = index;
-                    }
-                });
-
-                return storeIndex;
-            }
-
-            // todo: this will be the call to get one month of restaurant revenue
-            function getStoreData(storeId) {
-                return [
-                    {label: "7/16/2017", y: 11.33},
-                    {label: "7/23/2017", y: 22.44},
-                    {label: "7/30/2017", y: 11.55},
-                    {label: "8/6/2017", y: Math.floor(Math.random() * 10) + 1 }
-                ];
-
-                $.ajax({
-                    url: '',
-                    type: '',
-                    success: function() {
-                        console.log('success callback')
-                    },
-                    error: function() {
-                        console.log('error callback');
-                    }
-                });
-            }
 
 
         });
@@ -330,7 +168,161 @@
             margin-top:15px;
         }
     </style>
+
+    <style>
+        div.wpcf7 {
+            margin: 0;
+            padding: 0;
+        }
+
+        div.wpcf7-response-output {
+            margin: 2em 0.5em 1em;
+            padding: 0.2em 1em;
+        }
+
+        div.wpcf7 .screen-reader-response {
+            position: absolute;
+            overflow: hidden;
+            clip: rect(1px, 1px, 1px, 1px);
+            height: 1px;
+            width: 1px;
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        div.wpcf7-mail-sent-ok {
+            border: 2px solid #398f14;
+        }
+
+        div.wpcf7-mail-sent-ng {
+            border: 2px solid #ff0000;
+        }
+
+        div.wpcf7-spam-blocked {
+            border: 2px solid #ffa500;
+        }
+
+        div.wpcf7-validation-errors {
+            border: 2px solid #f7e700;
+        }
+
+        .wpcf7-form-control-wrap {
+            position: relative;
+        }
+
+        span.wpcf7-not-valid-tip {
+            color: #f00;
+            font-size: 1em;
+            font-weight: normal;
+            display: block;
+        }
+
+        .use-floating-validation-tip span.wpcf7-not-valid-tip {
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            z-index: 100;
+            border: 1px solid #ff0000;
+            background: #fff;
+            padding: .2em .8em;
+        }
+
+        span.wpcf7-list-item {
+            display: inline-block;
+            margin: 0 0 0 1em;
+        }
+
+        span.wpcf7-list-item-label::before,
+        span.wpcf7-list-item-label::after {
+            content: " ";
+        }
+
+        .wpcf7-display-none {
+            display: none;
+        }
+
+        div.wpcf7 .ajax-loader {
+            visibility: hidden;
+            display: inline-block;
+            background-image: url('../../images/ajax-loader.gif');
+            width: 16px;
+            height: 16px;
+            border: none;
+            padding: 0;
+            margin: 0 0 0 4px;
+            vertical-align: middle;
+        }
+
+        div.wpcf7 .ajax-loader.is-active {
+            visibility: visible;
+        }
+
+        div.wpcf7 div.ajax-error {
+            display: none;
+        }
+
+        div.wpcf7 .placeheld {
+            color: #888;
+        }
+
+        div.wpcf7 .wpcf7-recaptcha iframe {
+            margin-bottom: 0;
+        }
+
+        div.wpcf7 input[type="file"] {
+            cursor: pointer;
+        }
+
+        div.wpcf7 input[type="file"]:disabled {
+            cursor: default;
+        }
+
+        .wc_simple_product_badge {
+            position: absolute;
+            top: 0;
+            width:100%;
+            padding: 10px 0;
+            font-size: 16px;
+            background-color: rgba(255, 0, 0, 0.75);
+            color: #ffffff;
+            text-align:center;
+        }
+
+        .wc_simple_product_badge.orange {
+            background-color: rgba(255, 140, 0, 0.75) !important;
+        }
+
+        .wc_simple_product_badge.yellow {
+            background-color: rgba(255, 255, 0, 0.75) !important;
+            color: #000;
+        }
+
+        .wc_simple_product_badge.green {
+            background-color: rgba(0, 255, 0, 0.75) !important;
+        }
+
+        .wc_simple_product_badge.blue {
+            background-color: rgba(0, 0, 255, 0.75) !important;
+        }
+
+        .wc_simple_product_badge.purple {
+            background-color: rgba(128, 0, 128, 0.75) !important;
+        }
+
+        .wc_simple_product_badge.black {
+            background-color: rgba(0, 0, 0, 0.75) !important;
+        }
+
+
+
+    </style>
+
+
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <meta http-equiv="Content-Language" content="en">
 
 </head>
 <body>
@@ -471,16 +463,6 @@
         </div>
     </div>
 
-
-    <!-- Restaurant view -->
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <!-- restaurant table -->
-            <table class="table" id="restaurant-table"></table>
-
-            <div id="chartContainer" style="height: 300px; width: 100%;"></div>
-        </div>
-    </div>
 
 
 
