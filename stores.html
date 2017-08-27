@@ -2,6 +2,7 @@
 <!doctype html>
 <html>
 <head>
+    <title>Insight - Stores</title>
     <script
             src="https://code.jquery.com/jquery-3.2.1.min.js"
             integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -13,7 +14,7 @@
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
           crossorigin="anonymous">
 
-        
+
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
@@ -40,7 +41,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
         top:0;
         width:100%;
         z-index:100;
-        
+
         }
     .line-box {
         height: 53px;
@@ -64,7 +65,7 @@ border: 1px solid #F3F3F3;
 color: #CCCCCC;
 margin-right: 2px;
 padding: 2px 5px;
-border: 0;       
+border: 0;
 }
 .paginate_button:hover {
 border:1px solid #52bfea;
@@ -129,7 +130,7 @@ div.table-title {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   animation: float 5s infinite;
 }
- 
+
 th {
   color:#D5DDE5;
   background:#1b1e24;
@@ -146,7 +147,7 @@ th {
 th:first-child {
   border-top-left-radius:3px;
 }
- 
+
 th:last-child {
   border-top-right-radius:3px;
 }
@@ -160,12 +161,12 @@ tr {
   height: 2;
   text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
 }
- 
+
 tr:hover td {
   border-top: 1px solid #22262e;
   border-bottom: 1px solid #22262e;
 }
- 
+
 tr:first-child {
   border-top:none;
 }
@@ -173,20 +174,20 @@ tr:first-child {
 tr:last-child {
   border-bottom:none;
 }
- 
+
 tr:nth-child(odd) td {
   background:#EBEBEB;
 }
- 
+
 
 tr:last-child td:first-child {
   border-bottom-left-radius:3px;
 }
- 
+
 tr:last-child td:last-child {
   border-bottom-right-radius:3px;
 }
- 
+
 td {
   background:#FFFFFF;
   padding:15px;
@@ -226,9 +227,9 @@ td.text-right {
   text-align: right;
 }
 
-    
+
     </style>
-   
+
     <script>
         // todo: this will be an api request to get this data. It will then go into datatable
 //        var stores = [
@@ -364,7 +365,7 @@ td.text-right {
 
             $(document).on('click', '#restaurant-table tr', function () {
                 var storeId = $(this).attr('id');
-                
+
 
 
                 // check if the storeId already exists in our chart
@@ -386,7 +387,7 @@ td.text-right {
                     // get data about this store from the backend
                     var storeData = getStoreData(storeId);
                 }
-                
+
 
                 chart.render();
             });
@@ -500,7 +501,7 @@ td.text-right {
 <div class="container">
     <div class="row">
     <div class="col-md-12 text-center">
-        <div class="center-block"> 
+        <div class="center-block">
             <div class="panel panel-info" style="margin-top:20px;">
                 <div class="panel-body" id="panel-body" >
                     <!-- restaurant table -->

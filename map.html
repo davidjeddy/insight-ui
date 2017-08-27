@@ -1,105 +1,27 @@
-<style>
-    /* Always set the map height explicitly to define the size of the div
-     * element that contains the map. */
-    #map {
-        height: 100%;
-    }
-    /* Optional: Makes the sample page fill the window. */
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-</style>
-<script
-        async
-        defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSXj9TaCjGX_0BYbLy54S_4iC7qKcbOw0"
-></script>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"
-        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-        crossorigin="anonymous"></script>
-
-<div id="map"></div>
-<script>
-    $( document ).ready(function() {
-        var store = {};
-
-        $.ajax({
-            url: 'http://34.230.19.251:8080/api/v1/store/index',
-            success: function(result) {
-                store = result;
-                initMap(store);
-            }
-        });
-    });
-
-    /**
-     * @param object
-     * @returns void
-     */
-    function initMap(store) {
-
-        var infowindow = new google.maps.InfoWindow();
-
-        // Create the map.
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 11,
-            center: {lat: 27.70, lng:  -82.61},
-            mapTypeId: 'terrain'
-        });
-
-        // Construct the circle for each value in city map.
-        // Note: We scale the area of the circle based on the population.
-        for (var city in store.items) {
-
-            if (!store.items[city].lati || !store.items[city].long) {
-                continue;
-            }
-
-            var color = getColor(store.items[city].aov);
-
-            // Add the circle for this city to the map.
-            var cityCircle = new google.maps.Circle({
-                strokeColor: '#666666',
-                strokeOpacity: 0.8,
-                strokeWeight: 1,
-                fillColor: color,
-                fillOpacity: 0.33,
-                map: map,
-                center: {lat: parseFloat(store.items[city].lati), lng:  parseFloat(store.items[city].long)},
-                radius: 7500
-            });
-
-            // Add the marker itself
-            var marker = new google.maps.Marker({
-                position: {lat: parseFloat(store.items[city].lati), lng:  parseFloat(store.items[city].long)},
-                map: map
-            });
-
-            var infowindow = new google.maps.InfoWindow({
-                content: ' <div><b>store:</b>&nbsp;'+store.items[city].name+'</div>'
-                + '<div><b>Order Count:</b>&nbsp;'+store.items[city].order_count+'</div>'
-                + '<div><b>Ave. Order Price: </b>&nbsp;$'+store.items[city].aov+'</div>',
-                maxWidth: 160
-            });
-            infowindow.open(map, marker);
-        }
-    }
-
-    /**
-     * @param value
-     * @returns string
-     */
-    function getColor(value) {
-        if (value > 115) {
-            return 'green';
-        } else if (value > 110 && value <= 115) {
-            return 'yellow';
-        } else if (value > 100 && value <= 110) {
-            return 'red';
-        } else {
-            return 'black';
-        }
-    }
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Insight - Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="./css/map.css">
+    <script
+            async
+            defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSXj9TaCjGX_0BYbLy54S_4iC7qKcbOw0">
+    </script>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous">
+    </script>
+</head>
+<body>
+    <div id="map"></div>
+    <script
+            async
+            defer
+            src="./js/map/map.js">
+    </script>
+    </body>
+</html>
