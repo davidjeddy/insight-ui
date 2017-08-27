@@ -72,6 +72,7 @@
                 type: 'get',
                 success: function (data) {
                     stores = data.items;
+                    stores = formatStoreData(stores);
                     updateStoresDataTable(stores);
                     console.log('success callback')
                 },
@@ -80,6 +81,17 @@
                     console.log('error callback');
                 }
             });
+        }
+
+        function formatStoreData(storeData) {
+
+            storeData.forEach(function(element, index) {
+                element.renewal_rate = element.renewal_rate * 100 + '%';
+                element.aov = '$' + element.aov;
+                element.revenue = '$' + element.revenue;
+            });
+
+            return storeData;
         }
 
         /**
@@ -146,8 +158,6 @@
             chart.render();
 
             var storesInChart = [];
-
-
 
             $(document).on('click', '#restaurant-table tr', function () {
                 var storeId = $(this).attr('id');
@@ -227,8 +237,6 @@
                         data.rolling_revenue.forEach(function(element, index) {
                             storeData.push({label: element.data, y: element.value});
                         });
-
-                        var x = 5;
 
                         var store = getStore(storeId);
 
