@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>
-        Insight - Dashboard 
+        Insight - Dashboard
     </title>
     <script
             src="https://code.jquery.com/jquery-3.2.1.min.js"
@@ -61,7 +61,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
         top:0;
         width:100%;
         z-index:100;
-        
+
         }
     .line-box {
         height: 53px;
@@ -74,6 +74,165 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
     .bannertxt {
         color:aqua; font-family: 'Open Sans Condensed', sans-serif; font-size: 28px; font-weight: 300; margin: 0 0 10; padding: 20px 10px; text-align: center; text-transform: uppercase;
     }
+
+.table-title h3 {
+   color: #fafafa;
+   font-size: 20px;
+   font-weight: 400;
+   font-style:normal;
+   font-family: "Roboto", helvetica, arial, sans-serif;
+   text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+   text-transform:uppercase;
+}
+
+
+/*** Table Styles **/
+.panel-body {
+
+    top: 10%;
+    left: 50%;
+    align-content: center;
+    text-align: center;
+}
+.paginate_button {
+padding: 5px;
+margin-right: 2px;
+border: 1.5px solid #adebe8;
+color: #666B85;
+font-family: verdana;
+font-weight: 200
+}
+.paginate_button_disabled {
+border: 1px solid #F3F3F3;
+color: #CCCCCC;
+margin-right: 2px;
+padding: 2px 5px;
+border: 0;
+}
+.paginate_button:hover {
+border:1px solid #adebe8;
+color: #fff;
+background-color: #5cd6d2;
+}
+.paginate_active {
+padding: 2px 5px 2px 5px;
+margin-right: 2px;
+border: 1px solid #adebe8;
+font-weight: bold;
+background-color: #52bfea;
+color: #FFF;
+}
+.table-fill {
+  background: white;
+  border-radius:3px;
+  border-collapse: collapse;
+  height: 200px;
+  margin: auto;
+  max-width: 600px;
+  padding:5px;
+  width: 100%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  animation: float 5s infinite;
+}
+
+th {
+  color: mediumturquoise;
+  background:#1b1e24;
+  border-bottom:4px solid #9ea7af;
+  border-right: 1px solid #343a45;
+  font-size:18px;
+  font-weight: 100;
+  padding:14px;
+  text-align:left;
+  font-family: verdana;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  vertical-align:middle;
+}
+
+th:first-child {
+  border-top-left-radius:3px;
+}
+
+th:last-child {
+  border-top-right-radius:3px;
+}
+
+tr {
+  border-top: 1px solid #C1C3D1;
+  border-bottom: 1px solid #C1C3D1;
+  color:#666B85;
+  font-size:16px;
+  font-weight:normal;
+  height: 2;
+  text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+  text-align: center;
+}
+
+tr:hover td {
+  border-top: 1px solid #22262e;
+  border-bottom: 1px solid #22262e;
+}
+
+tr:first-child {
+  border-top:none;
+}
+
+tr:last-child {
+  border-bottom:none;
+}
+
+tr:nth-child(odd) td {
+  background:#EBEBEB;
+}
+
+
+tr:last-child td:first-child {
+  border-bottom-left-radius:3px;
+}
+
+tr:last-child td:last-child {
+  border-bottom-right-radius:3px;
+}
+
+td {
+  background:#FFFFFF;
+  padding:15px;
+  text-align:left;
+  vertical-align:middle;
+  font-weight:300;
+  font-size:18px;
+  text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+  border-right: 1px solid #C1C3D1;
+}
+
+td:last-child {
+  border-right: 0px;
+}
+
+th.text-left {
+  text-align: left;
+}
+
+th.text-center {
+  text-align: center;
+}
+
+th.text-right {
+  text-align: right;
+}
+
+td.text-left {
+  text-align: left;
+}
+
+td.text-center {
+  text-align: center;
+}
+
+td.text-right {
+  text-align: right;
+}
+
 </style>
 
 
@@ -395,18 +554,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
 <!-- header -->
 <div class="line-box">
   <div class="main-header" style="margin-left: 1px">
-      
-    
+
+
                 <div style="float: left; margin-top: 5px">
                     <font class="bannertxt" style="margin-top: 1px;">Insight</font>
                 </div>
-             
+
                 <div style="float: right; height: 20px; padding-top: 10px; padding-right:10px;">
-                
+
                 <button type="button" class="btn btn-primary btn-sm" onClick="window.location.href='./stores.html'" style="background: mediumturquoise; color: #FFFFF; font-family: verdana;"><span class="glyphicon glyphicon-list-alt"></span> View Stores</button>
-                 
+
                  <button type="button" class="btn btn-primary btn-sm" onClick="window.location.href='./map.html'" style="background: mediumturquoise; color: #FFFFF; font-family: verdana;"><span class="glyphicon glyphicon-map-marker"></span> View Map</button>
-                
+
                 </div>
         </div>
 
@@ -420,39 +579,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
 
     <div class="panel panel-default">
         <div id="top-panel" class="panel-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <label>Store</label>
 
-                    <select id="store-dropdown" class="form-control">
-                        <option value="">All Stores</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label>Customer Group</label>
-                    <div class="form-group">
-                        <div class='input-group date' id='customer-start-date'>
-                            <input id="customer-group" type='text' class="form-control"/>
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Report Date</label>
-                        <div class='input-group date' id='report-start-date'>
-                            <input id="report-date" type='text' class="form-control" value="''"/>
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div id="report-container" class="row">
                 <div class="col-md-6">
                     <div class="row">
@@ -488,13 +615,54 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
                     </div>
                 </div>
             </div>
+
+
         </div>
         <div id="dashboard-top-spinner" class="overlay">
             <i class="fa fa-refresh fa-spin"></i>
         </div>
     </div>
 
+    <div class="panel panel-default" style="border:none">
+        <div id="top-panel" class="panel-body" style="background-color:  #1b1e24;   font-size:15px; font-weight: 100; padding:14px; text-align: left; color: mediumturquoise; border-radius:10px;   font: verdana;">
 
+       <div class="row">
+
+                <div class="col-md-4">
+                    <label style="font-size:18px; font-weight: 100; font-family: verdana">Store</label>
+
+                    <select id="store-dropdown" class="form-control">
+                        <option value="">All Stores</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label style="font-size:18px; font-weight: 100; font-family: verdana">Report Start Date</label>
+                        <div class='input-group date' id='report-start-date'>
+                            <input id="report-date" type='text' class="form-control" value="''"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label style="font-size:18px; font-weight: 100; font-family: verdana">Customer Start Date</label>
+                    <div class="form-group">
+                        <div class='input-group date' id='customer-start-date'>
+                            <input id="customer-group" type='text' class="form-control"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+    </div></div>
 
 
     <div id="customer-tabs-panel" class="panel panel-default" style="display:none;">

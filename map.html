@@ -2,7 +2,7 @@
     <head>
 
             <title>
-        Insight - Dashboard 
+        Insight - Dashboard
     </title>
     </head>
     <body>
@@ -11,14 +11,17 @@
      * element that contains the map. */
     #map {
         height: 100%;
+        position: relative;
     }
     /* Optional: Makes the sample page fill the window. */
     html, body {
+        overflow: hidden;
         height: 100%;
         margin: 0;
         padding: 0;
     }
-            .main-header {
+
+    .main-header {
         height: 50px;
         margin: 0%;
         /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7d7e7d+0,595959+11,0e0e0e+53,1e2f30+88 */
@@ -30,9 +33,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
         top:0;
         width:100%;
         z-index:100;
-        
+
         }
     .line-box {
+        position: absolute;
         height: 53px;
         margin: 0%;
         background-color:mediumturquoise ;
@@ -123,7 +127,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
             var infowindow = new google.maps.InfoWindow({
                 content: ' <div><b>Store:</b>&nbsp;'+store.items[city].name+'</div>'
                 + '<div><b>Orders This Week:</b>&nbsp;'+store.items[city].order_count+'</div>'
-                + '<div><b>Avg. Order Price: </b>&nbsp;$'+store.items[city].aov+'</div>',
+                + '<div><b>Avg. Order Price: </b>&nbsp;$'+store.items[city].aov+'</div>'
+                + '<div><b>Phone: </b>&nbsp;'+store.items[city].manager.cell_number+'</div>',
                 maxWidth: 160
             });
             infowindow.open(map, marker);
@@ -152,18 +157,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
 
 <div class="line-box">
   <div class="main-header" style="margin-left: 1px">
-      
-    
+
+
                <div style="float: left; margin-top: 5px">
                     <font class="bannertxt" style="margin-top: 1px;">Insight</font>
                 </div>
-                
+
                 <div style="float: right; height: 20px; padding-top: 10px; padding-right:10px;">
 
                 <button type="button" class="btn btn-primary btn-sm" onClick="window.location.href='./index.html'" style="background: mediumturquoise; color: #FFFFF; font-family: verdana;"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</button>
-               
+
                 <button type="button" class="btn btn-primary btn-sm" onClick="window.location.href='./stores.html'" style="background: mediumturquoise; color: #FFFFF; font-family: verdana;"><span class="glyphicon glyphicon-list-alt"></span> View Stores</button>
-                   
+
                 </div>
         </div>
 
