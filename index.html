@@ -58,16 +58,18 @@
         var renewalCircle;
         var cumRenewalCircle;
         $(function () {
+
+
             renewalCircle = Circles.create({
                 id: 'renewal-circle',
                 radius: 60,
-                value: 43,
+                value: 0,
                 maxValue: 100,
                 width: 10,
                 text: function (value) {
                     return value + '%';
                 },
-                colors: ['#a9ef97', '#51ef26'],
+                colors: ['#D3D3D3', '#D3D3D3'],
                 duration: 400,
                 wrpClass: 'circles-wrp',
                 textClass: 'circles-text',
@@ -80,13 +82,13 @@
             cumRenewalCircle = Circles.create({
                 id: 'cum-renewal-circle',
                 radius: 60,
-                value: 77,
+                value: 0,
                 maxValue: 100,
                 width: 10,
                 text: function (value) {
                     return value + '%';
                 },
-                colors: ['#D3B6C6', '#4B253A'],
+                colors: ['#D3D3D3', '#D3D3D3'],
                 duration: 400,
                 wrpClass: 'circles-wrp',
                 textClass: 'circles-text',
@@ -98,8 +100,10 @@
 
 
             $('#report-start-date').datetimepicker({format: 'MM/DD/YYYY', daysOfWeekDisabled: [1, 2, 3, 4, 5, 6]});
-            $('#report-end-date').datetimepicker({format: 'MM/DD/YYYY', daysOfWeekDisabled: [1, 2, 3, 4, 5, 6]});
             $('#customer-start-date').datetimepicker({format: 'MM/DD/YYYY', daysOfWeekDisabled: [1, 2, 3, 4, 5, 6]});
+            // clear date pickers on page load
+            $('#report-date').val('');
+            $('#customer-group').val('');
 
             //todo: figure out a way here to highlight days the user can select in the menu
             $(document).on('dp.show', function(e) {
@@ -125,10 +129,6 @@
                 getDashboardData();
             });
 
-            // clear date pickers on page load
-            $('#report-date').val('');
-            $('#customer-group').val('');
-
 
 
         });
@@ -137,17 +137,20 @@
          * Gets a list of stores for drop down
          */
         function getStores() {
+            $('#dashboard-top-spinner').show();
+
             $.ajax({
                 url: 'http://34.230.19.251:8080/api/v1/store/index',
                 type: 'get',
                 success: function(data) {
-                    var x = 5;
+                    $('#dashboard-top-spinner').hide();
                     data.items.forEach(function(element, index) {
                         var option = '<option value="' + element.id + '">' + element.name + '</option>';
                         $("#store-dropdown").append(option);
                     });
                 },
                 error: function() {
+                    $('#dashboard-top-spinner').hide();
                     alert('error');
                 }
             })
@@ -168,17 +171,31 @@
         function areDatesValid() {
             var reportStart = $('#report-date').val();
             var custGroup = $('#customer-group').val();
+            var areDatesValid = true;
 
-            //if (reportStart)
+            if (reportStart !==  '' && custGroup !== '') {
+                reportStart = Date.parse(reportStart);
+                custGroup = Date.parse(custGroup);
+
+                if (reportStart < custGroup) {
+                    areDatesValid = false;
+                }
+            }
+
+            return areDatesValid;
         }
 
 
         var dashboardData;
         function getDashboardData() {
-//            if (!areDatesValid()) {
-//                alert('report date must be later than customer group');
-//                return;
-//            }
+            if (!areDatesValid()) {
+                $('#invalid-date-alert').show();
+                console.log('dates are invalid');
+                return;
+            } else {
+                $('#invalid-date-alert').hide();
+            }
+
             var queryParams = getQueryParams();
 
             $.ajax({
@@ -279,7 +296,7 @@
             if (!$.fn.dataTable.isDataTable('#lost-customer-tab')) {
 
                 lostCustTable = $('#lost-customer-tab').DataTable({
-                    data: lostCustTable,
+                    data: lostCustomers,
                     searching: false,
                     lengthChange: false,
                     columns : [
@@ -291,7 +308,7 @@
                 });
             } else {
                 lostCustTable.clear();
-                lostCustTable.rows.add(lostCustTable);
+                lostCustTable.rows.add(lostCustomers);
                 lostCustTable.draw();
             }
 
@@ -335,6 +352,10 @@
 
 <div class="container-fluid">
 
+    <div id="invalid-date-alert" class="alert alert-danger" role="alert" style="display:none;">
+        Report date must be after the customer group date.
+    </div>
+
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
@@ -370,17 +391,12 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <button class="btn btn-default btn-primary pull-right" type="submit">Generate Report</button>
-                </div>
-            </div>
             <div id="report-container" class="row">
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-12 text-center">
                             <div class="top-column">
-                                <label>Orders:</label> <span id="orders">43</span>
+                                <label>Orders:</label> <span id="orders">0</span>
                             </div>
                         </div>
                     </div>
@@ -399,24 +415,27 @@
                     <div class="row">
                         <div class="col-md-12 text-center">
                             <div class="top-column">
-                                <label>Revenue:</label> <span id="revenue">$4700.93</span>
+                                <label>Revenue:</label> <span id="revenue">$0.00</span>
                             </div>
                         </div>
                     </div>
                     <div id="column2-row2" class="row">
                         <div class="col-md-12 text-center">
-                            <label>Average Order Value:</label> <span id="aov">$1162.89</span>
+                            <label>Average Order Value:</label> <span id="aov">$0.00</span>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div id="dashboard-top-spinner" class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
         </div>
     </div>
 
 
 
 
-    <div class="panel panel-default">
+    <div class="panel panel-default" style="display:none;">
         <div class="panel-body">
             <div>
                 <!-- Nav tabs -->

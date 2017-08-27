@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="insightdev@insight-dev.cg2tjo99b1at.us-eastt-1.rds.amazonaws.com" uuid="f579eedb-aece-43fa-a74d-1b3eaf0ee17d">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+      <secret-storage>master_key</secret-storage>
+      <first-sync>true</first-sync>
+      <user-name>insightadmin</user-name>
+    </data-source>
+    <data-source name="insightdev@insight-dev.cg2tjo99b1at.us-east-1.rds.amazonaws.com" uuid="ae04faa8-5070-491a-8eb4-b71b7c4bbb2c">
+      <database-info product="MySQL" version="5.5.5-10.1.23-MariaDB" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>insightadmin</user-name>
+      <introspection-schemas>*:insightdev</introspection-schemas>
+    </data-source>
+  </component>
+</project>
