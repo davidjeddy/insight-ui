@@ -11,14 +11,17 @@
      * element that contains the map. */
     #map {
         height: 100%;
+        position: relative;
     }
     /* Optional: Makes the sample page fill the window. */
     html, body {
+        overflow: hidden;
         height: 100%;
         margin: 0;
         padding: 0;
     }
-            .main-header {
+
+    .main-header {
         height: 50px;
         margin: 0%;
         /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7d7e7d+0,595959+11,0e0e0e+53,1e2f30+88 */
@@ -33,6 +36,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
 
         }
     .line-box {
+        position: absolute;
         height: 53px;
         margin: 0%;
         background-color:mediumturquoise ;
