@@ -55,9 +55,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
         color:aqua; font-family: 'Open Sans Condensed', sans-serif; font-size: 28px; font-weight: 300; margin: 0 0 10; padding: 20px 10px; text-align: center; text-transform: uppercase;
     }
 .paginate_button {
-padding: 2px 5px 2px 5px;
+padding: 5px;
 margin-right: 2px;
-border: 1px solid #52BFEA;
+border: 1.5px solid #adebe8;
+color: #666B85;
+font-family: verdana;
+font-weight: 200
 }
 .paginate_button_disabled {
 border: 1px solid #F3F3F3;
@@ -67,17 +70,29 @@ padding: 2px 5px;
 border: 0;
 }
 .paginate_button:hover {
-border:1px solid #52bfea;
+border:1px solid #adebe8;
 color: #fff;
-background-color: #52bfea;
+background-color: #5cd6d2;
 }
 .paginate_active {
 padding: 2px 5px 2px 5px;
 margin-right: 2px;
-border: 1px solid #52bfea;
+border: 1px solid #adebe8;
 font-weight: bold;
 background-color: #52bfea;
 color: #FFF;
+}
+.table-fill {
+  background: white;
+  border-radius:3px;
+  border-collapse: collapse;
+  height: 200px;
+  margin: auto;
+  max-width: 600px;
+  padding:5px;
+  width: 100%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  animation: float 5s infinite;
 }
     @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100);
 
@@ -131,7 +146,7 @@ div.table-title {
 }
 
 th {
-  color: lightsteelblue;
+  color: mediumturquoise;
   background:#1b1e24;
   border-bottom:4px solid #9ea7af;
   border-right: 1px solid #343a45;
@@ -139,6 +154,7 @@ th {
   font-weight: 100;
   padding:14px;
   text-align:left;
+  font-family: verdana;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   vertical-align:middle;
 }
@@ -527,7 +543,7 @@ td.text-right {
 <div class="panel panel-default">
     <div class="panel-body">
         <div id="no-chart">
-            <div class="alert alert-info text-center" role="alert">
+            <div class="alert alert-info text-center" role="alert" style="background: #adebe8;">
                 Please choose a store to plot its history.
             </div>
         </div>
@@ -541,7 +557,7 @@ td.text-right {
 
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="home">
-                    <div id="revenueChart" style="margin-top:20px;height: 300px; width: 80;"></div>
+                    <div id="revenueChart" style="margin-top:20px; height: 300px; width: 80;"></div>
                 </div>
             </div>
         </div>
