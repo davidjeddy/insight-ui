@@ -2,7 +2,7 @@
     <head>
 
             <title>
-        Insight - Dashboard 
+        Insight - Dashboard
     </title>
     </head>
     <body>
@@ -30,7 +30,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
         top:0;
         width:100%;
         z-index:100;
-        
+
         }
     .line-box {
         height: 53px;
@@ -123,7 +123,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
             var infowindow = new google.maps.InfoWindow({
                 content: ' <div><b>Store:</b>&nbsp;'+store.items[city].name+'</div>'
                 + '<div><b>Orders This Week:</b>&nbsp;'+store.items[city].order_count+'</div>'
-                + '<div><b>Avg. Order Price: </b>&nbsp;$'+store.items[city].aov+'</div>',
+                + '<div><b>Avg. Order Price: </b>&nbsp;$'+store.items[city].aov+'</div>'
+                + '<div><b>Phone: </b>&nbsp;'+store.items[city].manager.cell_number+'</div>',
                 maxWidth: 160
             });
             infowindow.open(map, marker);
@@ -152,18 +153,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
 
 <div class="line-box">
   <div class="main-header" style="margin-left: 1px">
-      
-    
+
+
                <div style="float: left; margin-top: 5px">
                     <font class="bannertxt" style="margin-top: 1px;">Insight</font>
                 </div>
-                
+
                 <div style="float: right; height: 20px; padding-top: 10px; padding-right:10px;">
 
                 <button type="button" class="btn btn-primary btn-sm" onClick="window.location.href='./index.html'" style="background: mediumturquoise; color: #FFFFF; font-family: verdana;"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</button>
-               
+
                 <button type="button" class="btn btn-primary btn-sm" onClick="window.location.href='./stores.html'" style="background: mediumturquoise; color: #FFFFF; font-family: verdana;"><span class="glyphicon glyphicon-list-alt"></span> View Stores</button>
-                   
+
                 </div>
         </div>
 
