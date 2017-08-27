@@ -55,10 +55,11 @@
             return colors;
         }
 
-
+        var renewalCircle;
+        var cumRenewalCircle;
         $(function () {
-            var myCircle = Circles.create({
-                id: 'circles-1',
+            renewalCircle = Circles.create({
+                id: 'renewal-circle',
                 radius: 60,
                 value: 43,
                 maxValue: 100,
@@ -76,8 +77,8 @@
                 styleText: true
             });
 
-            var myCircle2 = Circles.create({
-                id: 'circles-2',
+            cumRenewalCircle = Circles.create({
+                id: 'cum-renewal-circle',
                 radius: 60,
                 value: 77,
                 maxValue: 100,
@@ -100,51 +101,193 @@
             $('#report-end-date').datetimepicker({format: 'MM/DD/YYYY', daysOfWeekDisabled: [1, 2, 3, 4, 5, 6]});
             $('#customer-start-date').datetimepicker({format: 'MM/DD/YYYY', daysOfWeekDisabled: [1, 2, 3, 4, 5, 6]});
 
-
+            //todo: figure out a way here to highlight days the user can select in the menu
             $(document).on('dp.show', function(e) {
                 console.log('show');
                 var x = $('[data-action="selectDay"]').css({ 'color': 'red', 'font-size': '150%' });
                 console.log(x);
             });
 
-            var dataSet = [
-                [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
-                [ "Garrett Winters", "Accountant", "Tokyo", "8422", "2011/07/25", "$170,750" ],
-                [ "Ashton Cox", "Junior Technical Author", "San Francisco", "1562", "2009/01/12", "$86,000" ],
-                [ "Cedric Kelly", "Senior Javascript Developer", "Edinburgh", "6224", "2012/03/29", "$433,060" ],
-            ];
+//            var dataSet = [
+//                [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
+//                [ "Garrett Winters", "Accountant", "Tokyo", "8422", "2011/07/25", "$170,750" ],
+//                [ "Ashton Cox", "Junior Technical Author", "San Francisco", "1562", "2009/01/12", "$86,000" ],
+//                [ "Cedric Kelly", "Senior Javascript Developer", "Edinburgh", "6224", "2012/03/29", "$433,060" ],
+//            ];
 
-            $('#example').DataTable( {
-                data: dataSet,
-                searching: false,
-                lengthChange: false,
-                columns: [
-                    { title: "Name" },
-                    { title: "Position" },
-                    { title: "Office" },
-                    { title: "Extn." },
-                    { title: "Start date" },
-                    { title: "Salary" }
-                ]
-            } );
+            getStores();
+
+            $('#store-dropdown').on('change', function() {
+                getDashboardData();
+            });
+
+            $(document).on('dp.change', function(e) {
+                getDashboardData();
+            });
+
+            // clear date pickers on page load
+            $('#report-date').val('');
+            $('#customer-group').val('');
 
 
 
-            // todo: this will be the ajax call to get the restaurant data for the datatable on page load
+        });
+
+        /**
+         * Gets a list of stores for drop down
+         */
+        function getStores() {
             $.ajax({
-                url: '',
-                type: '',
-                success: function() {
-                    console.log('success callback')
+                url: 'http://34.230.19.251:8080/api/v1/store/index',
+                type: 'get',
+                success: function(data) {
+                    var x = 5;
+                    data.items.forEach(function(element, index) {
+                        var option = '<option id="' + element.id + '">' + element.name + '</option>';
+                        $("#store-dropdown").append(option);
+                    });
+                },
+                error: function() {
+                    alert('error');
+                }
+            })
+        }
+
+        function getQueryParams() {
+            var reportStart = $('#report-date').val();
+            var custGroup = $('#customer-group').val();
+            var store =$('#store-dropdown').val();
+
+            return queryParams = $.param([
+                {name: 'store_id', value: store},
+                {name: 'customer_group', value: custGroup},
+                {name: 'report_date', value: reportStart}
+            ]);
+        }
+
+
+        var dashboardData;
+        function getDashboardData() {
+            var queryParams = getQueryParams();
+
+            $.ajax({
+                url: 'http://34.230.19.251:8080/api/v1/dashboard/index?' + queryParams,
+                type: 'get',
+                success: function(data) {
+                    dashboardData = data;
+
+                    // setup new customer tab
+                    initNewCustomerDataTable(dashboardData.new_customers);
+
+                    // setup lost customer tab
+                    initLostCustomerDataTable(dashboardData.lost_customers);
+
+                    updateRevenue(dashboardData.revenue);
+
+                    updateOrders(dashboardData.order_count);
+
+                    updateAov(dashboardData.aov);
+
+                    updateRenewal(dashboardData.renewal);
+
+                    updateCummulativeRenewal(dashboardData.cumulative_renewal);
+
+                    console.log('success callback');
                 },
                 error: function() {
                     console.log('error callback');
                 }
             });
+        }
 
+        function updateCummulativeRenewal(cumRenewal) {
+            cumRenewalCircle.update(cumRenewal);
+            cumRenewalCircle.updateColors(getCircleColors(cumRenewal));
+        }
 
+        function updateRenewal(renewal) {
+            renewalCircle.update(renewal);
+            renewalCircle.updateColors(getCircleColors(renewal));
+        }
 
-        });
+        function updateRevenue(revenue) {
+            $('#revenue').html('$' + revenue);
+        }
+
+        function updateOrders(orders) {
+            $('#orders').html(orders);
+        }
+
+        function updateAov(aov) {
+            $('#aov').html('$' + aov);
+        }
+
+        var newCustDataTable;
+        function initNewCustomerDataTable(newCustomers) {
+            /**
+             * {
+                  "customer_id": "455",
+                  "username": "dkirschweng",
+                  "total_order_amt": "129.4200",
+                  "store_id": "3",
+                  "store_name": "Countryside"
+                },
+             */
+
+            if (!$.fn.dataTable.isDataTable('#new-customer-tab')) {
+                newCustDataTable = $('#new-customer-tab').DataTable( {
+                    data: newCustomers,
+                    searching: false,
+                    lengthChange: false,
+                    columns: [
+                        { title: "Customer",  data: "username"},
+                        { title: "Role", data: "role"},
+                        { title: "Total Order Amount", data: "total_order_amt" },
+                        { title: "Store", data: "store_name" }
+                    ]
+                });
+            } else {
+                newCustDataTable.clear();
+                newCustDataTable.rows.add(newCustomers);
+                newCustDataTable.draw();
+            }
+        }
+
+        var lostCustTable;
+        function initLostCustomerDataTable(lostCustomers) {
+            /**
+             * {
+                  "id": "198",
+                  "role": "Subscriber",
+                  "username": "karilynn0216",
+                  "customer_id": "198",
+                  "lifetime_amt": "320.8500",
+                  "avg_order_amt": "106.95000000"
+                }
+             */
+            if (!$.fn.dataTable.isDataTable('#lost-customer-tab')) {
+
+                lostCustTable = $('#lost-customer-tab').DataTable({
+                    data: lostCustTable,
+                    searching: false,
+                    lengthChange: false,
+                    columns : [
+                        {title: "Customer", data: "username"},
+                        {title: "Role", data: "role"},
+                        {title: "Average Order Amount", data: "avg_order_amt"},
+                        {title: "Lifetime Order Amount", data: "lifetime_amt"}
+                    ]
+                });
+            } else {
+                lostCustTable.clear();
+                lostCustTable.rows.add(lostCustTable);
+                lostCustTable.draw();
+            }
+
+        }
+
+        getDashboardData();
+
     </script>
     <style>
         .top-column {
@@ -169,155 +312,6 @@
         }
     </style>
 
-    <style>
-        div.wpcf7 {
-            margin: 0;
-            padding: 0;
-        }
-
-        div.wpcf7-response-output {
-            margin: 2em 0.5em 1em;
-            padding: 0.2em 1em;
-        }
-
-        div.wpcf7 .screen-reader-response {
-            position: absolute;
-            overflow: hidden;
-            clip: rect(1px, 1px, 1px, 1px);
-            height: 1px;
-            width: 1px;
-            margin: 0;
-            padding: 0;
-            border: 0;
-        }
-
-        div.wpcf7-mail-sent-ok {
-            border: 2px solid #398f14;
-        }
-
-        div.wpcf7-mail-sent-ng {
-            border: 2px solid #ff0000;
-        }
-
-        div.wpcf7-spam-blocked {
-            border: 2px solid #ffa500;
-        }
-
-        div.wpcf7-validation-errors {
-            border: 2px solid #f7e700;
-        }
-
-        .wpcf7-form-control-wrap {
-            position: relative;
-        }
-
-        span.wpcf7-not-valid-tip {
-            color: #f00;
-            font-size: 1em;
-            font-weight: normal;
-            display: block;
-        }
-
-        .use-floating-validation-tip span.wpcf7-not-valid-tip {
-            position: absolute;
-            top: 20%;
-            left: 20%;
-            z-index: 100;
-            border: 1px solid #ff0000;
-            background: #fff;
-            padding: .2em .8em;
-        }
-
-        span.wpcf7-list-item {
-            display: inline-block;
-            margin: 0 0 0 1em;
-        }
-
-        span.wpcf7-list-item-label::before,
-        span.wpcf7-list-item-label::after {
-            content: " ";
-        }
-
-        .wpcf7-display-none {
-            display: none;
-        }
-
-        div.wpcf7 .ajax-loader {
-            visibility: hidden;
-            display: inline-block;
-            background-image: url('../../images/ajax-loader.gif');
-            width: 16px;
-            height: 16px;
-            border: none;
-            padding: 0;
-            margin: 0 0 0 4px;
-            vertical-align: middle;
-        }
-
-        div.wpcf7 .ajax-loader.is-active {
-            visibility: visible;
-        }
-
-        div.wpcf7 div.ajax-error {
-            display: none;
-        }
-
-        div.wpcf7 .placeheld {
-            color: #888;
-        }
-
-        div.wpcf7 .wpcf7-recaptcha iframe {
-            margin-bottom: 0;
-        }
-
-        div.wpcf7 input[type="file"] {
-            cursor: pointer;
-        }
-
-        div.wpcf7 input[type="file"]:disabled {
-            cursor: default;
-        }
-
-        .wc_simple_product_badge {
-            position: absolute;
-            top: 0;
-            width:100%;
-            padding: 10px 0;
-            font-size: 16px;
-            background-color: rgba(255, 0, 0, 0.75);
-            color: #ffffff;
-            text-align:center;
-        }
-
-        .wc_simple_product_badge.orange {
-            background-color: rgba(255, 140, 0, 0.75) !important;
-        }
-
-        .wc_simple_product_badge.yellow {
-            background-color: rgba(255, 255, 0, 0.75) !important;
-            color: #000;
-        }
-
-        .wc_simple_product_badge.green {
-            background-color: rgba(0, 255, 0, 0.75) !important;
-        }
-
-        .wc_simple_product_badge.blue {
-            background-color: rgba(0, 0, 255, 0.75) !important;
-        }
-
-        .wc_simple_product_badge.purple {
-            background-color: rgba(128, 0, 128, 0.75) !important;
-        }
-
-        .wc_simple_product_badge.black {
-            background-color: rgba(0, 0, 0, 0.75) !important;
-        }
-
-
-
-    </style>
-
 
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta charset="UTF-8">
@@ -333,11 +327,11 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>Report Start Date</label>
                         <div class='input-group date' id='report-start-date'>
-                            <input type='text' class="form-control"/>
+                            <input id="report-date" type='text' class="form-control" value="''"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -345,35 +339,19 @@
                     </div>
                 </div>
 
-                <div class="col-md-3">
-                    <label>Report End Date</label>
-                    <div class="form-group">
-                        <div class='input-group date' id='report-end-date'>
-                            <input type='text' class="form-control"/>
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label>Store</label>
 
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
+                    <select id="store-dropdown" class="form-control">
+                        <option value="">All Stores</option>
                     </select>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label>Customer Start Date</label>
                     <div class="form-group">
                         <div class='input-group date' id='customer-start-date'>
-                            <input type='text' class="form-control"/>
+                            <input id="customer-group" type='text' class="form-control"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -391,17 +369,17 @@
                     <div class="row">
                         <div class="col-md-12 text-center">
                             <div class="top-column">
-                                <label>Orders:</label> 43
+                                <label>Orders:</label> <span id="orders">43</span>
                             </div>
                         </div>
                     </div>
                     <div id="renewal-rate-container" class="row">
                         <div class="col-md-6 text-center">
-                            <div class="circle" id="circles-1"></div>
+                            <div class="circle" id="renewal-circle"></div>
                             <label class="circle-label">Renewal Rate</label>
                         </div>
                         <div class="col-md-6 text-center">
-                            <div class="circle" id="circles-2"></div>
+                            <div class="circle" id="cum-renewal-circle"></div>
                             <label class="circle-label">Cumulative Renewal Rate</label>
                         </div>
                     </div>
@@ -410,16 +388,13 @@
                     <div class="row">
                         <div class="col-md-12 text-center">
                             <div class="top-column">
-                                <label>Revenue:</label> $4700.93
+                                <label>Revenue:</label> <span id="revenue">$4700.93</span>
                             </div>
                         </div>
                     </div>
                     <div id="column2-row2" class="row">
-                        <div class="col-md-6 text-center">
-                            <label>Average Order Value:</label> $1162.89
-                        </div>
-                        <div class="col-md-6 text-center">
-                            <label>GM / NTF Customer:</label> $40.38
+                        <div class="col-md-12 text-center">
+                            <label>Average Order Value:</label> <span id="aov">$1162.89</span>
                         </div>
                     </div>
                 </div>
@@ -442,21 +417,11 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="home">
-                        <table class="table" id="example"></table>
+                        <table class="table" id="new-customer-tab" style="width:100%"></table>
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="profile">
-                        <table class="table">
-                            <thead>
-                            <tr><th>Name</th>
-                                <th>Phone Number</th>
-                                <th>Role</th>
-                                <th>Store</th>
-                                <th>Average Order Amount</th>
-                                <th>Lifetime Order Amount</th>
-                            </tr>
-                            </thead>
-                        </table>
+                        <table class="table" id="lost-customer-tab" style="width:100%"></table>
                     </div>
                 </div>
             </div>
