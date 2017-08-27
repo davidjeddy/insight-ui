@@ -143,7 +143,7 @@
                 success: function(data) {
                     var x = 5;
                     data.items.forEach(function(element, index) {
-                        var option = '<option id="' + element.id + '">' + element.name + '</option>';
+                        var option = '<option value="' + element.id + '">' + element.name + '</option>';
                         $("#store-dropdown").append(option);
                     });
                 },
@@ -165,9 +165,20 @@
             ]);
         }
 
+        function areDatesValid() {
+            var reportStart = $('#report-date').val();
+            var custGroup = $('#customer-group').val();
+
+            //if (reportStart)
+        }
+
 
         var dashboardData;
         function getDashboardData() {
+//            if (!areDatesValid()) {
+//                alert('report date must be later than customer group');
+//                return;
+//            }
             var queryParams = getQueryParams();
 
             $.ajax({
