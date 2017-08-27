@@ -124,7 +124,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
                 content: ' <div><b>Store:</b>&nbsp;'+store.items[city].name+'</div>'
                 + '<div><b>Orders This Week:</b>&nbsp;'+store.items[city].order_count+'</div>'
                 + '<div><b>Avg. Order Price: </b>&nbsp;$'+store.items[city].aov+'</div>'
-                + '<div><b>Mngt Phone: </b>&nbsp;$'+store.items[city].manager.cell_number+'</div>',
+                + '<div><b>Phone: </b>&nbsp;'+store.items[city].manager.cell_number+'</div>',
                 maxWidth: 160
             });
             infowindow.open(map, marker);
