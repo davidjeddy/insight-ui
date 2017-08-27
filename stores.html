@@ -1,4 +1,4 @@
-<!doctype html>
+
 <!doctype html>
 <html>
 <head>
@@ -29,7 +29,7 @@
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
     <style type="text/css">
-        .main-header {
+    .main-header {
         height: 50px;
         margin: 0%;
         /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7d7e7d+0,595959+11,0e0e0e+53,1e2f30+88 */
@@ -52,9 +52,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
         z-index:100;
     }
     .bannertxt {
-        color:aqua; font-family: 'Open Sans Condensed', sans-serif; font-size: 28px; font-weight: 300; line-height: 64px; margin: 0 0 0; padding: 10px 10px; text-align: center; text-transform: uppercase;
+        color:aqua; font-family: 'Open Sans Condensed', sans-serif; font-size: 28px; font-weight: 300; margin: 0 0 10; padding: 20px 10px; text-align: center; text-transform: uppercase;
     }
-
 .paginate_button {
 padding: 2px 5px 2px 5px;
 margin-right: 2px;
@@ -132,13 +131,13 @@ div.table-title {
 }
 
 th {
-  color:#D5DDE5;
+  color: lightsteelblue;
   background:#1b1e24;
   border-bottom:4px solid #9ea7af;
   border-right: 1px solid #343a45;
   font-size:18px;
   font-weight: 100;
-  padding:24px;
+  padding:14px;
   text-align:left;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   vertical-align:middle;
@@ -160,6 +159,7 @@ tr {
   font-weight:normal;
   height: 2;
   text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+  text-align: center;
 }
 
 tr:hover td {
@@ -367,7 +367,7 @@ td.text-right {
                 // check if the storeId already exists in our chart
                 var storeChartIndex = getStoreChartIndex(storeId);
                 if (storeChartIndex !== false) {
-                     $(this).css('background','');
+                     $(this).css('background','red');
                     // the store is alredy displayed in the chart, remove it via its index
                     chart.options.data.splice(storeChartIndex, 1);
                     storesInChart.splice(storeChartIndex, 1);
@@ -484,12 +484,22 @@ td.text-right {
 
 <!-- header -->
 <div class="line-box">
-  <div class="main-header" style="text-align: center">
-      <font class="bannertxt">Insight</font>
-</div>
-</div>
+    
+  <div class="main-header" style="margin-left: 1px">
+        
+    
+                <div style="float: left; margin-top: 10px">
+                    <font class="bannertxt" style="margin-top: 1px;">Insight</font>
+                </div>
+             
+                <div style="float: right; height: 20px; padding-top: 10px; padding-right:10px;">
+                    <button type="button" class="btn btn-primary btn-sm" onClick="window.location.href='./index.html'" style="background: mediumturquoise; color: #FFFFF; font-family: verdana;"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</button>
+               
+                    <button type="button" class="btn btn-primary btn-sm" onClick="window.location.href='./map.html'" style="background: mediumturquoise; color: #FFFFF; font-family: verdana;"><span class="glyphicon glyphicon-map-marker"></span> View Map</button>
+                </div>
+        </div>
 
-
+</div>
 
 
 
