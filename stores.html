@@ -151,7 +151,6 @@
 
             $(document).on('click', '#restaurant-table tr', function () {
                 var storeId = $(this).attr('id');
-                var store = getStore(storeId);
 
                 // check if the storeId already exists in our chart
                 var storeChartIndex = getStoreChartIndex(storeId);
@@ -169,23 +168,6 @@
                 } else {
                     // get data about this store from the backend
                     var storeData = getStoreData(storeId);
-
-                    // push it into the chart
-                    chart.options.data.push({
-                        type: "line",
-                        dataPoints: storeData,
-                        legendText: store.name,
-                        showInLegend: true
-                    });
-
-                    // store the store id and position in chart, used later for removing
-                    storesInChart.push({
-                        storeId: storeId,
-                        chartIndex: chart.options.data.length
-                    });
-
-                    $('#no-chart').hide();
-                    $('#charts-container').show();
                 }
 
 
@@ -228,23 +210,54 @@
 
             // todo: this will be the call to get one month of restaurant revenue
             function getStoreData(storeId) {
-                return [
-                    {label: "7/16/2017", y: 11.33},
-                    {label: "7/23/2017", y: 22.44},
-                    {label: "7/30/2017", y: 11.55},
-                    {label: "8/6/2017", y: Math.floor(Math.random() * 10) + 1}
-                ];
+//                return [
+//                    {label: "7/16/2017", y: 11.33},
+//                    {label: "7/23/2017", y: 22.44},
+//                    {label: "7/30/2017", y: 11.55},
+//                    {label: "8/6/2017", y: Math.floor(Math.random() * 10) + 1}
+//                ];
 
                 $.ajax({
-                    url: '',
-                    type: '',
-                    success: function () {
-                        console.log('success callback')
+                    url: 'http://34.230.19.251:8080/api/v1/store/4-weeks-of-revenue?id=' + storeId,
+                    type: 'get',
+                    success: function (data) {
+                        console.log('success callback');
+
+                        var storeData = [];
+                        data.rolling_revenue.forEach(function(element, index) {
+                            storeData.push({label: element.data, y: element.value});
+                        });
+
+                        var x = 5;
+
+                        var store = getStore(storeId);
+
+
+                        // push it into the chart
+                        chart.options.data.push({
+                            type: "line",
+                            dataPoints: storeData,
+                            legendText: store.name,
+                            showInLegend: true
+                        });
+
+                        // store the store id and position in chart, used later for removing
+                        storesInChart.push({
+                            storeId: storeId,
+                            chartIndex: chart.options.data.length
+                        });
+
+                        $('#no-chart').hide();
+                        $('#charts-container').show();
+                        //return storeData;
+
+                        chart.render();
                     },
                     error: function () {
                         console.log('error callback');
                     }
                 });
+
             }
         });
     </script>
