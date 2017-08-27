@@ -137,20 +137,17 @@
          * Gets a list of stores for drop down
          */
         function getStores() {
-            $('#dashboard-top-spinner').show();
 
             $.ajax({
                 url: 'http://34.230.19.251:8080/api/v1/store/index',
                 type: 'get',
                 success: function(data) {
-                    $('#dashboard-top-spinner').hide();
                     data.items.forEach(function(element, index) {
                         var option = '<option value="' + element.id + '">' + element.name + '</option>';
                         $("#store-dropdown").append(option);
                     });
                 },
                 error: function() {
-                    $('#dashboard-top-spinner').hide();
                     alert('error');
                 }
             })
@@ -221,6 +218,8 @@
                     updateCummulativeRenewal(dashboardData.cumulative_renewal);
 
                     console.log('success callback');
+
+                    $('#customer-tabs-panel').show();
                 },
                 error: function() {
                     console.log('error callback');
@@ -357,7 +356,7 @@
     </div>
 
     <div class="panel panel-default">
-        <div class="panel-body">
+        <div id="top-panel" class="panel-body">
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -435,7 +434,7 @@
 
 
 
-    <div class="panel panel-default" style="display:none;">
+    <div id="customer-tabs-panel" class="panel panel-default" style="display:none;">
         <div class="panel-body">
             <div>
                 <!-- Nav tabs -->
