@@ -149,7 +149,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
             //todo: figure out a way here to highlight days the user can select in the menu
             $(document).on('dp.show', function(e) {
                 console.log('show');
-                var x = $('[data-action="selectDay"]').css({ 'color': 'red', 'font-size': '150%' });
+                var x = $('.datepicker tbody tr');
+                x.each(function(index, element) {
+                    $(element).find('td').first().css({'color': 'green', 'font-weight': 'bolder', 'text-decoration': 'underline'});
+                });
                 console.log(x);
             });
 
