@@ -1,0 +1,565 @@
+
+<!doctype html>
+<html>
+<head>
+    <title>Insight - Stores</title>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+    <!-- data tables -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.css">
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+    <!-- canvas js -->
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+    <style type="text/css">
+    .main-header {
+        height: 50px;
+        margin: 0%;
+        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7d7e7d+0,595959+11,0e0e0e+53,1e2f30+88 */
+background: rgb(125,126,125); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(125,126,125,1) 0%, rgba(89,89,89,1) 11%, rgba(14,14,14,1) 53%, rgba(30,47,48,1) 88%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, rgba(125,126,125,1) 0%,rgba(89,89,89,1) 11%,rgba(14,14,14,1) 53%,rgba(30,47,48,1) 88%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, rgba(125,126,125,1) 0%,rgba(89,89,89,1) 11%,rgba(14,14,14,1) 53%,rgba(30,47,48,1) 88%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#1e2f30',GradientType=0 ); /* IE6-9 */
+        top:0;
+        width:100%;
+        z-index:100;
+
+        }
+    .line-box {
+        height: 53px;
+        margin: 0%;
+        background-color:mediumturquoise ;
+        top:0;
+        width:100%;
+        z-index:100;
+    }
+    .bannertxt {
+        color:aqua; font-family: 'Open Sans Condensed', sans-serif; font-size: 28px; font-weight: 300; margin: 0 0 10; padding: 20px 10px; text-align: center; text-transform: uppercase;
+    }
+.paginate_button {
+padding: 5px;
+margin-right: 2px;
+border: 1.5px solid #adebe8;
+color: #666B85;
+font-family: verdana;
+font-weight: 200
+}
+.paginate_button_disabled {
+border: 1px solid #F3F3F3;
+color: #CCCCCC;
+margin-right: 2px;
+padding: 2px 5px;
+border: 0;
+}
+.paginate_button:hover {
+border:1px solid #adebe8;
+color: #fff;
+background-color: #5cd6d2;
+}
+.paginate_active {
+padding: 2px 5px 2px 5px;
+margin-right: 2px;
+border: 1px solid #adebe8;
+font-weight: bold;
+background-color: #52bfea;
+color: #FFF;
+}
+.table-fill {
+  background: white;
+  border-radius:3px;
+  border-collapse: collapse;
+  height: 200px;
+  margin: auto;
+  max-width: 600px;
+  padding:5px;
+  width: 100%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  animation: float 5s infinite;
+}
+    @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100);
+
+
+div.container {
+    width: 95%;
+}
+.table-chart table {
+    text-align: center;
+    width: 100%
+}
+
+div.table-title {
+  display: block;
+  margin: auto;
+  max-width: 600px;
+  padding:5px;
+  width: 100%;
+}
+
+.table-title h3 {
+   color: #fafafa;
+   font-size: 20px;
+   font-weight: 400;
+   font-style:normal;
+   font-family: "Roboto", helvetica, arial, sans-serif;
+   text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+   text-transform:uppercase;
+}
+
+
+/*** Table Styles **/
+.panel-body {
+
+    top: 10%;
+    left: 50%;
+    align-content: center;
+    text-align: center;
+}
+.table-fill {
+  background: white;
+  border-radius:3px;
+  border-collapse: collapse;
+  height: 200px;
+  margin: auto;
+  max-width: 600px;
+  padding:5px;
+  width: 100%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  animation: float 5s infinite;
+}
+
+th {
+  color: mediumturquoise;
+  background:#1b1e24;
+  border-bottom:4px solid #9ea7af;
+  border-right: 1px solid #343a45;
+  font-size:18px;
+  font-weight: 100;
+  padding:14px;
+  text-align:left;
+  font-family: verdana;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  vertical-align:middle;
+}
+
+th:first-child {
+  border-top-left-radius:3px;
+}
+
+th:last-child {
+  border-top-right-radius:3px;
+}
+
+tr {
+  border-top: 1px solid #C1C3D1;
+  border-bottom: 1px solid #C1C3D1;
+  color:#666B85;
+  font-size:16px;
+  font-weight:normal;
+  height: 2;
+  text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+  text-align: center;
+}
+
+tr:hover td {
+  border-top: 1px solid #22262e;
+  border-bottom: 1px solid #22262e;
+}
+
+tr:first-child {
+  border-top:none;
+}
+
+tr:last-child {
+  border-bottom:none;
+}
+
+tr:nth-child(odd) td {
+  background:#EBEBEB;
+}
+
+
+tr:last-child td:first-child {
+  border-bottom-left-radius:3px;
+}
+
+tr:last-child td:last-child {
+  border-bottom-right-radius:3px;
+}
+
+td {
+  background:#FFFFFF;
+  padding:15px;
+  text-align:left;
+  vertical-align:middle;
+  font-weight:300;
+  font-size:18px;
+  text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+  border-right: 1px solid #C1C3D1;
+}
+
+td:last-child {
+  border-right: 0px;
+}
+
+th.text-left {
+  text-align: left;
+}
+
+th.text-center {
+  text-align: center;
+}
+
+th.text-right {
+  text-align: right;
+}
+
+td.text-left {
+  text-align: left;
+}
+
+td.text-center {
+  text-align: center;
+}
+
+td.text-right {
+  text-align: right;
+}
+
+
+    </style>
+
+    <script>
+        // todo: this will be an api request to get this data. It will then go into datatable
+//        var stores = [
+//            {
+//                "id": 1,
+//                "store": "Winter Park",
+//                "orders": "33",
+//                "renewalRate": "61%",
+//                "cumulativeRenewalRate": "35%",
+//                "aov": "$306.38",
+//                "revenue": "$5711.99",
+//                "NGF": "20.89"
+//            },
+//            {
+//                "id": 2,
+//                "store": "aaa",
+//                "orders": "33",
+//                "renewalRate": "61%",
+//                "cumulativeRenewalRate": "35%",
+//                "aov": "$306.38",
+//                "revenue": "$5711.99",
+//                "NGF": "20.89"
+//            },
+//            {
+//                "id": 3,
+//                "store": "bbb",
+//                "orders": "33",
+//                "renewalRate": "61%",
+//                "cumulativeRenewalRate": "35%",
+//                "aov": "$306.38",
+//                "revenue": "$5711.99",
+//                "NGF": "20.89"
+//            }
+//        ];
+        var stores;
+
+
+
+        function getAllStores() {
+            $.ajax({
+                url: 'http://34.230.19.251:8080/api/v1/store/index',
+                type: 'get',
+                success: function (data) {
+                    stores = data.items;
+                    stores = formatStoreData(stores);
+                    updateStoresDataTable(stores);
+                    console.log('success callback')
+                },
+                error: function (error) {
+                    alert('error');
+                    console.log('error callback');
+                }
+            });
+        }
+
+        function formatStoreData(storeData) {
+
+            storeData.forEach(function(element, index) {
+                element.renewal_rate = element.renewal_rate * 100 + '%';
+                element.aov = '$' + element.aov;
+                element.revenue = '$' + element.revenue;
+            });
+
+            return storeData;
+        }
+
+        /**
+         * Init the data table with provided store data
+         */
+        function updateStoresDataTable(stores) {
+            $('#restaurant-table').DataTable({
+                scrollX: true,
+                data: stores,
+                searching: false,
+                lengthChange: false,
+                rowId: "id",
+                pageLength: 5,
+                "columns": [
+                    {"data": "name", "title": "Store"},
+                    {"data": "order_count", "title": "Orders"},
+                    {"data": "renewal_rate", "title": "Renewal Rate"},
+                    {"data": "aov", "title": "AOV"},
+                    {"data": "revenue", "title": "Revenue"}
+                ]
+            });
+        }
+
+        $(function () {
+            stores = getAllStores();
+
+
+
+            var chart = new CanvasJS.Chart("revenueChart", {
+                data: [
+                    //{
+                    //    // Change type to "doughnut", "line", "splineArea", etc.
+                    //    type: "line",
+                    //    dataPoints: [
+                    //        { label: "7/16/2017",  y: 33.33  },
+                    //        { label: "7/23/2017", y: 44.44  },
+                    //        { label: "7/30/2017", y: 33.55  },
+                    //        { label: "8/6/2017",  y: 66.66  },
+                    //    ]
+                    //},
+                    //{
+                    //    // Change type to "doughnut", "line", "splineArea", etc.
+                    //    type: "line",
+                    //    dataPoints: [
+                    //        { label: "7/16/2017",  y: 10  },
+                    //        { label: "7/23/2017", y: 15  },
+                    //        { label: "7/30/2017", y: 25  },
+                    //        { label: "8/6/2017",  y: 30  }
+                    //    ]
+                    //}
+
+                ],
+                legend: {
+                    horizontalAlign: "left", // "center" , "right"
+                    verticalAlign: "top",  // "top" , "bottom"
+                    fontSize: 12,
+                    fontFamily: "verdana"
+                },
+                scrollX: true
+            });
+
+            chart.render();
+
+            var storesInChart = [];
+
+            $(document).on('click', '#restaurant-table tr', function () {
+                var storeId = $(this).attr('id');
+
+
+
+                // check if the storeId already exists in our chart
+                var storeChartIndex = getStoreChartIndex(storeId);
+                if (storeChartIndex !== false) {
+                     $(this).css('background','red');
+                    // the store is alredy displayed in the chart, remove it via its index
+                    chart.options.data.splice(storeChartIndex, 1);
+                    storesInChart.splice(storeChartIndex, 1);
+
+                    // we may have removed the last item, hide the chart if so
+                    if (storesInChart.length === 0) {
+                        $('#charts-container').hide();
+                        $('#no-chart').show();
+                    }
+
+                } else {
+                    $(this).css('background','gray');
+                    // get data about this store from the backend
+                    var storeData = getStoreData(storeId);
+                }
+
+
+                chart.render();
+            });
+
+            /**
+             * gets store index in storesInChart, for removal
+             *
+             * @param storeId
+             * @returns {boolean}
+             */
+            function getStoreChartIndex(storeId) {
+                var storeIndex = false;
+                storesInChart.forEach(function (element, index) {
+                    if (element.storeId == storeId) {
+                        storeIndex = index;
+                    }
+                });
+
+                return storeIndex;
+            }
+
+            /**
+             * given a store id, find the object in the data provided by
+             * the backend representing this store
+             *
+             * @param storeId
+             */
+            function getStore(storeId) {
+                var store = false;
+                stores.forEach(function(element, index) {
+                    if (element.id == storeId){
+                        store = element;
+                    }
+                });
+
+                return store
+            }
+
+            // todo: this will be the call to get one month of restaurant revenue
+            function getStoreData(storeId) {
+//                return [
+//                    {label: "7/16/2017", y: 11.33},
+//                    {label: "7/23/2017", y: 22.44},
+//                    {label: "7/30/2017", y: 11.55},
+//                    {label: "8/6/2017", y: Math.floor(Math.random() * 10) + 1}
+//                ];
+
+                $.ajax({
+                    url: 'http://34.230.19.251:8080/api/v1/store/4-weeks-of-revenue?id=' + storeId,
+                    type: 'get',
+                    success: function (data) {
+                        console.log('success callback');
+
+                        var storeData = [];
+                        data.rolling_revenue.forEach(function(element, index) {
+                            storeData.push({label: element.data, y: element.value});
+                        });
+
+                        var store = getStore(storeId);
+
+
+                        // push it into the chart
+                        chart.options.data.push({
+                            type: "line",
+                            dataPoints: storeData,
+                            legendText: store.name,
+                            showInLegend: true
+                        });
+
+                        // store the store id and position in chart, used later for removing
+                        storesInChart.push({
+                            storeId: storeId,
+                            chartIndex: chart.options.data.length
+                        });
+
+                        $('#no-chart').hide();
+                        $('#charts-container').show();
+                        //return storeData;
+
+                        chart.render();
+                    },
+                    error: function () {
+                        console.log('error callback');
+                    }
+                });
+
+            }
+        });
+    </script>
+
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+          name="viewport">
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <meta http-equiv="Content-Language" content="en">
+</head>
+<body>
+
+<!-- header -->
+<div class="line-box">
+    
+  <div class="main-header" style="margin-left: 1px">
+        
+    
+                <div style="float: left; margin-top: 10px">
+                    <font class="bannertxt" style="margin-top: 1px;">Insight</font>
+                </div>
+             
+                <div style="float: right; height: 20px; padding-top: 10px; padding-right:10px;">
+                    <button type="button" class="btn btn-primary btn-sm" onClick="window.location.href='./index.html'" style="background: mediumturquoise; color: #FFFFF; font-family: verdana;"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</button>
+               
+                    <button type="button" class="btn btn-primary btn-sm" onClick="window.location.href='./map.html'" style="background: mediumturquoise; color: #FFFFF; font-family: verdana;"><span class="glyphicon glyphicon-map-marker"></span> View Map</button>
+                </div>
+        </div>
+
+</div>
+
+
+
+<!-- store view -->
+<div class="container">
+    <div class="row">
+    <div class="col-md-12 text-center">
+        <div class="center-block">
+            <div class="panel panel-info" style="margin-top:20px;">
+                <div class="panel-body" id="panel-body" >
+                    <!-- restaurant table -->
+                    <table id="restaurant-table" style="width:100%;"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div id="no-chart">
+            <div class="alert alert-info text-center" role="alert" style="background: #adebe8;">
+                Please choose a store to plot its history.
+            </div>
+        </div>
+
+        <div id="charts-container" style="display:none;">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Revenue</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <div id="revenueChart" style="margin-top:20px; height: 300px; width: 80;"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+
